@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sabio.Models.Requests.LoanApplications
-{
-    public class BorrowerCollateralAddRequest
+﻿public class BorrowerCollateralAddRequest
     {
         [Required]
         public int BorrowerId { get; set; }
@@ -22,4 +13,3 @@ namespace Sabio.Models.Requests.LoanApplications
         [Range(0, int.MaxValue)]
         public int Quantity { get; set; }
     }
-}
