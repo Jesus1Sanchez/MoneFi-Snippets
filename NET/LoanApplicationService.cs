@@ -1,25 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Sabio.Data;
-using Sabio.Data.Providers;
-using Sabio.Models;
-using Sabio.Models.Domain;
-using Sabio.Models.Domain.BusinessProfiles;
-using Sabio.Models.Domain.LoanApplications;
-using Sabio.Models.Requests.LoanApplications;
-using Sabio.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sabio.Services
-{
-    public class LoanApplicationService : ILoanApplicationService
+﻿public class LoanApplicationService : ILoanApplicationService
     {
         IDataProvider _data = null;
         ILookUpService _lookUpService = null;
@@ -312,4 +291,3 @@ namespace Sabio.Services
             return table;
         }
     }
-}
