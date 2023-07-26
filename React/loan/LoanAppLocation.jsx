@@ -2,11 +2,8 @@ import React, { useEffect } from "react";
 import { withFormik, Form, ErrorMessage } from "formik";
 import { PropTypes } from "prop-types";
 import AutoCompleteField from "components/location/AutoComplete";
-import debug from "sabio-debug";
 import locationService from "services/locationService";
 import loanApplicationSchema from "schemas/loanApplicationSchemas";
-
-const _logger = debug.extend("LoanLocation");
 
 const LoanAppLocation = (props) => {
   const {
@@ -23,7 +20,6 @@ const LoanAppLocation = (props) => {
     isSubmitting,
     onBack,
   } = props;
-  false && _logger(loanProps);
 
   const onNextClick = () => {
     onNext(values);
@@ -37,7 +33,6 @@ const LoanAppLocation = (props) => {
     if (errors === "") {
       notDisabled = true;
     }
-    _logger(notDisabled, "disable");
     return notDisabled;
   };
   useEffect(() => {
@@ -59,12 +54,10 @@ const LoanAppLocation = (props) => {
         },
         [values?.location]
       );
-      _logger("useeffect", values);
     }
   }, [values?.location]);
 
   const onLocationGetByIdSuccess = (response) => {
-    _logger("getBy location success", response);
     setFieldValue("location.latitude", response.item.latitude);
     setFieldValue("location.longitude", response.item.longitude);
     setFieldValue("location.lineOne", response.item.lineOne);
@@ -86,9 +79,7 @@ const LoanAppLocation = (props) => {
       [values?.location]
     );
   };
-  const onLocationGetByIdError = (error) => {
-    _logger("getBy location error", error);
-  };
+  const onLocationGetByIdError = (error) => {};
 
   const handleLocation = (data) => {
     setFieldValue("location.latitude", data.latitude);
@@ -110,15 +101,12 @@ const LoanAppLocation = (props) => {
       stateId: data.stateId,
     };
 
-    _logger("data", data, values.locationId);
     if (values.locationId !== "" || undefined) {
-      _logger(values);
       locationService
         .update(values.locationId, locationPayload)
         .then(onUpdateLocationSuccess)
         .catch(onUpdateLocationError);
     } else {
-      _logger("Form Values:", values);
       locationService
         .add(locationPayload)
         .then(onAddLocationSuccess)
@@ -127,25 +115,16 @@ const LoanAppLocation = (props) => {
   };
 
   const onAddLocationSuccess = (response) => {
-    _logger("Location added!", response);
     values.locationId = response.item;
 
     setFieldValue("locationId", response.item);
-
-    _logger("locationId", values.locationId);
   };
 
-  const onAddLocationError = (error) => {
-    _logger("Add Error:", error);
-  };
+  const onAddLocationError = (error) => {};
 
-  const onUpdateLocationSuccess = (response) => {
-    _logger("Location updated Success", response);
-  };
+  const onUpdateLocationSuccess = (response) => {};
 
-  const onUpdateLocationError = (error) => {
-    _logger("Add Error:", error);
-  };
+  const onUpdateLocationError = (error) => {};
 
   return (
     <Form onSubmit={handleSubmit} className="p-1 formik-form">

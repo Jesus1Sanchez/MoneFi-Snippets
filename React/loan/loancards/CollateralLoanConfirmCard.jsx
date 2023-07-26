@@ -1,13 +1,8 @@
 import React from "react";
-import debug from "sabio-debug";
 import PropTypes from "prop-types";
 import { Card } from "react-bootstrap";
 
-const _logger = debug.extend("Test");
-
 function CollateralLoanConfirmCoard(props) {
-  _logger("propsssssss", props);
-
   return (
     <React.Fragment>
       <div className="col-6 my-2">

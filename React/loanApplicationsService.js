@@ -1,11 +1,7 @@
 import axios from "axios";
 import * as helper from "./serviceHelpers";
-import debug from "sabio-debug";
-
 
 const endpoint =  `${helper.API_HOST_PREFIX}/api/loanapplications`;
-const _logger = debug.extend("LoanAppService")
-
 
 const getLoanApps = (pageIndex, pageSize) =>{
     const config = {
@@ -18,7 +14,6 @@ const getLoanApps = (pageIndex, pageSize) =>{
   
     return axios(config).then(helper.onGlobalSuccess).catch(helper.onGlobalError);
   };
-
 
   const searchByTypeLoanApps = (pageIndex, pageSize, typeId) =>{
     const config = {
@@ -41,7 +36,6 @@ const getLoanApps = (pageIndex, pageSize) =>{
   };
 
   const add = (payload) => {
-    _logger("AddLoanApps Service executing", payload)
     const config = {
       method: "POST", 
       url: `${endpoint}`,
@@ -54,8 +48,6 @@ const getLoanApps = (pageIndex, pageSize) =>{
     .then(helper.onGlobalSuccess).catch(helper.onGlobalError);
   }; 
 
-
   const loanAppsService = {getLoanApps, searchByTypeLoanApps, add,searchByuser};
-
 
   export default loanAppsService;
