@@ -1,10 +1,7 @@
 import React from "react";
 import { Form, Field, ErrorMessage, withFormik } from "formik";
-import debug from "sabio-debug";
 import PropTypes from "prop-types";
 import loanApplicationSchema from "schemas/loanApplicationSchemas";
-
-const _logger = debug.extend("LoanAppS1");
 
 const LoanAppBorrower = (props) => {
   const {
@@ -21,7 +18,6 @@ const LoanAppBorrower = (props) => {
     isSubmitting,
     onBack,
   } = props;
-  false && _logger(loanProps);
 
   const onNextClick = () => {
     onNext(values);
@@ -35,11 +31,8 @@ const LoanAppBorrower = (props) => {
     if (errors === "") {
       notDisabled = true;
     }
-    _logger(notDisabled, "disable");
     return notDisabled;
   };
-
-  _logger("values", values);
 
   return (
     <Form onSubmit={handleSubmit} className="p-1 formik-form">
