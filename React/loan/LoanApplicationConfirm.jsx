@@ -4,10 +4,6 @@ import PropTypes from "prop-types";
 import { withFormik } from "formik";
 import CollateralLoanConfirmCoard from "./loancards/CollateralLoanConfirmCard";
 
-import debug from "sabio-debug";
-
-const _logger = debug.extend("LoanConfirm");
-
 function LoanApplicationConfirm(props) {
   const {
     values,
@@ -18,10 +14,6 @@ function LoanApplicationConfirm(props) {
     onBack,
     lookUps,
   } = props;
-
-  _logger("confirmish", values);
-  _logger("prop.value", loanProps);
-  _logger("LookUpTypes", lookUps);
 
   const onBackClick = () => {
     onBack(values);
@@ -35,10 +27,7 @@ function LoanApplicationConfirm(props) {
   };
 
   const colMap = (arr, index) => {
-    _logger("Arr", index);
-
     const filterType = (indCol) => {
-      _logger("indCol", indCol);
       var result = false;
       if (indCol.id === parseInt(arr.collateralTypeId)) {
         return true;
@@ -50,11 +39,9 @@ function LoanApplicationConfirm(props) {
     let colName = lookUps.collateralTypes
       .filter(filterType)
       .map((filteredType) => {
-        _logger("inside colmap", filteredType);
         return (arr.colName = filteredType.name);
       });
 
-    _logger("colName", colName);
     return (
       <CollateralLoanConfirmCoard
         className=" my-2"

@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Form, withFormik } from "formik";
-import debug from "sabio-debug";
 import { Card } from "react-bootstrap";
 import PropTypes from "prop-types";
 import loanApplicationSchema from "schemas/loanApplicationSchemas";
 import UploadFile from "components/files/UploadFile";
 import { FaFileAlt } from "react-icons/fa";
-
-const _logger = debug.extend("LoanAppS3");
 
 const LoanAppStep3 = (props) => {
   const [fileArray, setFileArray] = useState({
@@ -15,7 +12,6 @@ const LoanAppStep3 = (props) => {
     fileNameDiv: [],
   });
 
-  _logger(fileArray);
   const {
     values,
     onNext,
@@ -42,19 +38,14 @@ const LoanAppStep3 = (props) => {
         pd.fileNameArr.push({ fileName: values.documentName });
         values.filesArray = pd.fileNameArr;
         setFieldValue("filesArray", pd.fileNameArr);
-        _logger("documentName", values.documentName);
         pd.fileNameDiv = values.filesArray.map(mapFiles);
 
-        _logger("before return", values.filesArray);
         return pd;
       });
-
-      _logger("fileArray", values.filesArray);
     }
   }, [values?.documentName || values.filesArray]);
 
   const mapFiles = (file) => {
-    _logger("file mapper firing", file);
     return (
       <Card className="my-2">
         <div>
@@ -66,16 +57,13 @@ const LoanAppStep3 = (props) => {
   };
 
   const batchLoanFilesMapper = (indvFile) => {
-    _logger("Mapper", indvFile);
     const newFileData = {
       fileId: indvFile.fileId,
       loanFileTypeId: values.loanTypeId,
     };
     indvFile.loanFileTypeId = values.loanTypeId;
-    _logger("newFileData", newFileData);
     return newFileData;
   };
-  _logger("New Values", values);
 
   return (
     <Form onSubmit={handleSubmit} className="p-1 formik-form">
@@ -86,15 +74,12 @@ const LoanAppStep3 = (props) => {
               <div className="col-6 my-2">
                 <UploadFile
                   getResponseName={(arr) => {
-                    _logger("fileResponse name", arr);
-
                     arr.map((ind) => {
                       setFieldValue("documentName", ind.name);
                       return ind.name;
                     });
                   }}
                   getResponseFile={(arr) => {
-                    _logger("fileResponse", arr);
                     values.batchLoanFiles = arr.map(batchLoanFilesMapper);
                     setFieldValue("url", arr[0].url);
                   }}

@@ -7,7 +7,6 @@ import LoanAppStep1 from "./LoanAppStep1";
 import LoanAppStep2 from "./LoanAppLocation";
 import LoanAppCollateral from "./LoanAppCollateral";
 import LoanAppStep3 from "./LoanAppStep3";
-import debug from "sabio-debug";
 import lookUpService from "services/lookUpService";
 import LoanApplicationConfirm from "./LoanApplicationConfirm";
 import loanAppsService from "../../services/loanApplicationsService";
@@ -21,7 +20,6 @@ import {
   FaMapMarkedAlt,
 } from "react-icons/fa";
 
-const _logger = debug.extend("LoanApp");
 function LoanApplication() {
   const [loanApplicationData, setLoanApplicationData] = useState({
     sSN: "",
@@ -47,8 +45,6 @@ function LoanApplication() {
   const [valueGrabber, setValueGrabber] = useState({
     filesArray: [],
   });
-
-  _logger("lookUpTypes Array", lookUpTypes);
 
   const LoanAppSteps = [
     {
@@ -132,7 +128,6 @@ function LoanApplication() {
   }, []);
 
   const onGetTypesSuccess = (response) => {
-    _logger("onGetTypesSuccess", response.item);
     if (response.item)
       setLookUpTypes({
         loanTypes: response.item.loanTypes,
@@ -141,13 +136,9 @@ function LoanApplication() {
         loanTermTypes: response.item.loanTermTypes,
       });
   };
-  const onGetTypesError = (error) => {
-    _logger("onGetTyppesError", error);
-  };
+  const onGetTypesError = (error) => {};
 
   const mergeValues = (values) => {
-    _logger("Aplication Values being passed", values);
-    _logger(valueGrabber);
     setValueGrabber((prevState) => {
       const pd = { ...prevState };
 
@@ -169,26 +160,20 @@ function LoanApplication() {
       pd.isBusinessIsBusiness = values.isBusinessIsBusiness;
       pd.batchLoanFiles = values.batchLoanFiles;
       pd.batchBorrowerCollaterals = values.batchBorrowerCollaterals;
-
-      _logger("pd", pd);
       return pd;
     });
-    _logger("OnMerge App Data", loanApplicationData, valueGrabber);
   };
 
   const onFinishLoki = () => {
-    _logger("finish BTN CLicked", loanApplicationData);
     loanAppsService
       .add(loanApplicationData)
       .then(onLoanAppAddSuccess)
       .catch(onLoanAppAddError);
   };
   const onLoanAppAddSuccess = (response) => {
-    _logger("yay!", response);
     toastr.success("Success", "Loan Has Been Submitted");
   };
   const onLoanAppAddError = (error) => {
-    _logger("error boooooooo", error);
     toastr.error("Error", "Check values and try again");
   };
 

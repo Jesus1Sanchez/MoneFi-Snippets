@@ -1,11 +1,8 @@
 import React from "react";
 import { Form, withFormik, FieldArray } from "formik";
-import debug from "sabio-debug";
 import PropTypes from "prop-types";
 import loanApplicationSchema from "schemas/loanApplicationSchemas";
 import CollateralLoanCards from "./loancards/CollateralLoanCards";
-
-const _logger = debug.extend("LoanAppCollateral");
 
 const LoanAppCollateral = (props) => {
   const {
@@ -20,7 +17,6 @@ const LoanAppCollateral = (props) => {
     isSubmitting,
     onBack,
   } = props;
-  false && _logger(loanProps);
 
   const onNextClick = () => {
     onNext(values);
@@ -40,7 +36,6 @@ const LoanAppCollateral = (props) => {
     if (errors === "") {
       notDisabled = true;
     }
-    _logger(notDisabled, "disable");
     return notDisabled;
   };
 
