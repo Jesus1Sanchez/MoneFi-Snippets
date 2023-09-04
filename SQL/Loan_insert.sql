@@ -34,12 +34,12 @@ DECLARE @LoanTypeId int = 1
        ,@IsBusiness bit = 0
        ,@CreatedBy int = 3
        ,@Id int
-	   ,@SSN nvarchar(20) = '333-33-3333'
-	   ,@BorrowerStatusId int= 4
-	   ,@AnnualIncome int = 800000
-	   ,@LocationId int = 7
-        ,@BatchLoanFiles dbo.BatchLoanFiles
-        ,@BatchBorrowerCollaterals dbo.BatchBorrowerCollaterals
+       ,@SSN nvarchar(20) = '333-33-3333'
+       ,@BorrowerStatusId int= 4
+       ,@AnnualIncome int = 800000
+       ,@LocationId int = 7
+       ,@BatchLoanFiles dbo.BatchLoanFiles
+       ,@BatchBorrowerCollaterals dbo.BatchBorrowerCollaterals
 		
 
 EXEC [dbo].[LoanApplications_InsertV3]
@@ -52,12 +52,12 @@ EXEC [dbo].[LoanApplications_InsertV3]
       ,@IsBusiness
       ,@CreatedBy
       ,@Id OUTPUT
-	  ,@SSN 
-	  ,@BorrowerStatusId 
-	  ,@AnnualIncome 
-	  ,@LocationId  
-	  ,@BatchLoanFiles
-	  ,@BatchBorrowerCollaterals
+      ,@SSN 
+      ,@BorrowerStatusId 
+      ,@AnnualIncome 
+      ,@LocationId  
+      ,@BatchLoanFiles
+      ,@BatchBorrowerCollaterals
 
 SELECT *
 FROM dbo.LoanApplications
@@ -79,68 +79,72 @@ DECLARE @DateCreated DATETIME2 = GETUTCDATE(),
             @DateModified DATETIME2 = GETUTCDATE()
 			
 
-    INSERT INTO dbo.LoanApplications (LoanTypeId,
-                                      LoanAmount,
-                                      LoanTerm,
-                                      PreferredInterestRate,
-                                      CreditScore,
-                                      StatusId,
-                                      IsBusiness,
-                                      CreatedBy,
-                                      ModifiedBy)
-			      VALUES (@LoanTypeId,
-				      @LoanAmount,
-				      @LoanTerm,
-				      @PreferredInterestRate,
-				      @CreditScore,
-				      @StatusId,
-				      @IsBusiness,
-				      @CreatedBy,
-				      @CreatedBy)
+    INSERT INTO dbo.LoanApplications 
+		(LoanTypeId
+                ,LoanAmount
+                ,LoanTerm
+                ,PreferredInterestRate
+                ,CreditScore
+                ,StatusId
+                ,IsBusiness
+                ,CreatedBy
+                ,ModifiedBy)
+	VALUES 
+		(@LoanTypeId
+		,@LoanAmount
+		,@LoanTerm
+		,@PreferredInterestRate
+		,@CreditScore
+		,@StatusId
+		,@IsBusiness
+		,@CreatedBy
+		,@CreatedBy)
 
     SET @Id = SCOPE_IDENTITY();
 
 	Declare @BorrowerId int = 0;
 
 	INSERT INTO [dbo].[Borrowers]
-			([UserId]
-			,[SSN]
-			,[StatusId]
-			,[AnnualIncome]
-			,[LocationId])
+		([UserId]
+		,[SSN]
+		,[StatusId]
+		,[AnnualIncome]
+		,[LocationId])
     	 VALUES
-			(@CreatedBy
-			,@SSN
-			,@BorrowerStatusId
-			,@AnnualIncome
-			,@LocationId)
+		(@CreatedBy
+		,@SSN
+		,@BorrowerStatusId
+		,@AnnualIncome
+		,@LocationId)
 
 	Set @BorrowerId = SCOPE_IDENTITY(); 
-	--//215
+	
+   	 INSERT INTO dbo.LoanFiles 
+		(LoanId
+		,FileId
+		,LoanFileTypeId)
+    	SELECT  
+		 @Id
+		,FileId
+		,LoanFileTypeId 
+	FROM @BatchLoanFiles
 
-   	 INSERT INTO dbo.LoanFiles (
-				    LoanId
-			 	    ,FileId
-				    ,LoanFileTypeId
-				    )
-    	SELECT @Id, FileId, LoanFileTypeId FROM @BatchLoanFiles
-
-    	INSERT INTO dbo.BorrowerCollateral (
-				    BorrowerId
-				    ,CollateralTypeId
-				    ,Amount
-				    ,Quantity
-				    )										
-   	 SELECT @BorrowerId, CollateralTypeId, Amount, Quantity FROM @BatchBorrowerCollaterals
-
-
+    	INSERT INTO dbo.BorrowerCollateral 
+		(BorrowerId
+		,CollateralTypeId
+		,Amount
+		,Quantity)										
+   	SELECT 
+		@BorrowerId
+		,CollateralTypeId
+		,Amount
+		,Quantity 
+	FROM @BatchBorrowerCollaterals
 
 Commit Transaction @Tran
 
 END TRY
 BEGIN Catch
-
-
 
     IF (XACT_STATE()) = -1
     BEGIN
